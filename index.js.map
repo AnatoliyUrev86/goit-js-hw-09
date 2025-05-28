@@ -1,0 +1,1 @@
+{"version":3,"file":"index.js","sources":["../src/main.js"],"sourcesContent":["const a = 5;\nconsole.log(5);\n"],"names":[],"mappings":"0uBACA,QAAQ,IAAI,CAAC"}
