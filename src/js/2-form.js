@@ -1,45 +1,38 @@
-formData = { email: '', message: '' };
-localStorage.setItem(formData, JSON.stringify(email, message));
-const value = localStorage.getItem(email, message);
-const STORAGE_KEY = 'feedback-form';
-const form = document.querySelector('.feedback-form');
+const formData = { email: '', message: '' };
+const STORAGE_KEY = 'feedback-form-state';
+const value = JSON.parse(localStorage.getItem(STORAGE_KEY));
 const textarea = document.querySelector('textarea');
-textarea.addEventListener('input', handalInput);
-function handalInput(event) {
-  const message = event.target.value;
-  populateTextAres();
-  localStorage.setItem(STORAGE_KEY, message);
-  console.log(message);
+const inputEl = document.querySelector('input[name="email"]');
+const formEl = document.querySelector('.feedback-form');
+
+if (value) {
+  formData.email = value.email;
+  formData.message = value.message;
+  inputEl.value = value.email;
+  textarea.value = value.message;
 }
 
-function populateTextAres() {
-  const savedMessage = localStorage.getItem(STORAGE_KEY);
-  console.log(savedMessage);
-  if (savedMessage) {
-    textarea.value = savedMessage;
+formEl.addEventListener('input', handalInput);
+function handalInput(event) {
+  const { name, value } = event.target;
+  console.log(name, value);
+  if (name === 'email' || name === 'message') {
+    formData[name] = value.trim();
+    console.log(formData);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(formData));
   }
 }
 
-const formEl = document.querySelector('.feedback-form');
 formEl.addEventListener('submit', event => {
   event.preventDefault();
   const inputEmail = event.currentTarget.elements.email.value.trim();
-  const inputMessage = event.currentTarget.elements.password.value.trim();
+  const inputMessage = event.currentTarget.elements.message.value.trim();
   if (!inputEmail || !inputMessage) {
     alert('Fill please all fields');
     return;
   }
-  const data = {
-    inputEmail,
-    inputMessage,
-  };
-  console.log(data);
-  formEl.reset();
-});
 
-form.addEventListener('submit', handalSubmit);
-function handalSubmit(event) {
-  event.preventDefault();
-  event.currentTarget.reset();
+  console.log(formData);
+  formEl.reset();
   localStorage.removeItem(STORAGE_KEY);
-}
+});
